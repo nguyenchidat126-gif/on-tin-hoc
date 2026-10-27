@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn Tập Kiểm Tra Lịch Sử 10 - Giữa HK1 (180 Câu Trắc Nghiệm)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen font-sans">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Nguồn dữ liệu 180 câu hỏi trắc nghiệm chuẩn từ tài liệu
+        const originalQuestions = [
+            // CHỦ ĐỀ 1 (1 - 35)
+            { id: 1, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Hiện thực lịch sử là tất cả những", options: ["A. điều đã diễn ra trong quá khứ, tồn tại theo ý muốn của con người.", "B. điều đã diễn ra trong quá khứ, tồn tại một cách khách quan, độc lập.", "C. hiện tượng siêu nhiên tác động đến tiến trình phát triển loài người.", "D. nhân vật trong quá khứ có đóng góp cho sự phát triển của nhân loại."], answer: 1 },
+            { id: 2, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Tất cả những gì đã diễn ra trong quá khứ, tồn tại một cách khách quan, không phụ thuộc vào ý muốn chủ quan của con người được gọi là", options: ["A. hiện thực lịch sử.", "B. tư duy lịch sử.", "C. nhận thức lịch sử.", "D. khám phá lịch sử."], answer: 0 },
+            { id: 3, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây không đúng về khái niệm lịch sử?", options: ["A. Những gì đã diễn ra trong quá khứ của xã hội loài người.", "B. Những nhận thức, hiểu biết của con người về quá khứ.", "C. Khoa học nghiên cứu về sự tương tác của con người với xã hội.", "D. Sự tưởng tượng của con người về xã hội tương lai."], answer: 3 },
+            { id: 4, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây phản ánh đúng hiện thực lịch sử?", options: ["A. Những nhận thức và hiểu biết của con người về quá khứ.", "B. Những câu chuyện kể hoặc tác phẩm ghi chép về lịch sử.", "C. Ngành khoa học nghiên cứu về quá khứ của con người.", "D. Những sự kiện xảy ra trong quá khứ, tồn tại khách quan."], answer: 3 },
+            { id: 5, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây không phản ánh đúng đặc điểm của hiện thực lịch sử?", options: ["A. Có trước lịch sử được con người nhận thức.", "B. Không phụ thuộc vào ý muốn của con người.", "C. Có tính duy nhất và không thể thay đổi được.", "D. Được trình bày theo nhiều cách khác nhau."], answer: 3 },
+            { id: 6, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây phản ánh đúng lịch sử được con người nhận thức?", options: ["A. Những suy nghĩ và hiểu biết của con người về quá khứ.", "B. Những tưởng tượng của con người về xã hội tương lai.", "C. Những hiện vật, di tích lịch sử được con người phát hiện.", "D. Những sự kiện xảy ra trong quá khứ, tồn tại khách quan."], answer: 0 },
+            { id: 7, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây phản ánh đúng đặc điểm của nhận thức lịch sử?", options: ["A. Nhận thức lịch sử luôn phản ánh đúng hiện thực lịch sử.", "B. Nhận thức lịch sử không thể tái hiện đầy đủ hiện thực lịch sử.", "C. Nhận thức lịch sử thường lạc hậu hơn hiện thực lịch sử.", "D. Nhận thức lịch sử độc lập, khách quan với hiện thực lịch sử."], answer: 1 },
+            { id: 8, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây phản ánh đúng điểm khác biệt của lịch sử được con người nhận thức so với hiện thực lịch sử?", options: ["A. Có tính đa dạng và có thể thay đổi theo thời gian.", "B. Được tái hiện duy nhất thông qua các bản ghi chép.", "C. Không phụ thuộc vào ý muốn chủ quan con người.", "D. Không chịu sự chi phối của mục đích nghiên cứu."], answer: 0 },
+            { id: 9, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây không phải là nguyên nhân khiến lịch sử được con người nhận thức có sự khác nhau?", options: ["A. Mục đích nghiên cứu.", "B. Phương pháp nghiên cứu.", "C. Hiện thực lịch sử.", "D. Nguồn sử liệu."], answer: 2 },
+            { id: 10, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Ngày 2 – 9 – 1945, tại Quảng trường Ba Đình (Hà Nội), Chủ tịch Hồ Chí Minh đọc bản Tuyên ngôn Độc lập, khai sinh ra nước Việt Nam Dân chủ Cộng hòa. Sự kiện này là kết quả của Cách mạng tháng Tám năm 1945, cuộc cách mạng giải phóng dân tộc điển hình. Đoạn tư liệu phản ảnh nội dung nào của khái niệm lịch sử?", options: ["A. Tư liệu gốc phục vụ việc nghiên cứu và học tập lịch sử.", "B. Tất cả những tri thức về lịch sử đã được nhận thức lại.", "C. Tất cả những trí thức về quy luật lịch sử được đúc kết lại.", "D. Hiện thực lịch sử và lịch sử được con người nhận thức."], answer: 3 },
+            { id: 11, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây phản ánh đúng khái niệm Sử học?", options: ["A. Là những câu chuyện kể về nguồn gốc loài người.", "B. Là khoa học nghiên cứu về quá khứ loài người.", "C. Là những tưởng tượng của con người về tương lai.", "D. Là nghiên cứu về sự hình thành và phát triển của vũ trụ."], answer: 1 },
+            { id: 12, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây phản ánh đúng đối tượng nghiên cứu của Sử học?", options: ["A. Những hoạt động của con người trong quá khứ.", "B. Quá trình hình thành và phát triển của vũ trụ.", "C. Những hoạt động của con người trong tương lai.", "D. Quá trình tiến hóa của các sinh vật trên Trái Đất."], answer: 0 },
+            { id: 13, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây không phải là đối tượng nghiên cứu của Sử học?", options: ["A. Quá trình hình thành, phát triển, suy vong của một dân tộc.", "B. Quá trình hoạt động, đóng góp của một cá nhân trong quá khứ.", "C. Hoạt động ngoại giao của một quốc gia trong quá khứ.", "D. Những hiện tượng tự nhiên xảy ra trong quá khứ."], answer: 3 },
+            { id: 14, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Một trong những nhiệm vụ quan trọng của Sử học là", options: ["A. khám phá đại dương.", "B. hội nhập quốc tế.", "C. giáo dục, nêu gương.", "D. chinh phục vũ trụ."], answer: 2 },
+            { id: 15, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây phản ánh đúng về đối tượng nghiên cứu của Sử học?", options: ["A. Những hoạt động của con người trên lĩnh vực chính trị, quân sự.", "B. Toàn bộ những hoạt động của con người diễn ra trong quá khứ.", "C. Toàn bộ những hoạt động của con người từ thời cổ đại đến cận đại.", "D. Những hoạt động của con người từ khi xuất hiện chữ viết đến nay."], answer: 1 },
+            { id: 16, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây không phải là chức năng của Sử học?", options: ["A. Khôi phục các sự kiện lịch sử diễn ra trong quá khứ.", "B. Rút ra bản chất và các quy luật vận động của lịch sử.", "C. Giáo dục tình yêu thiên nhiên và bảo vệ môi trường.", "D. Rút ra những bài học kinh nghiệm cho cuộc sống hiện tại."], answer: 2 },
+            { id: 17, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Một trong những chức năng cơ bản của Sử học là", options: ["A. khôi phục hiện thực lịch sử thông qua tưởng tượng.", "B. tái tạo lại các biến cố lịch sử thông qua thí nghiệm.", "C. khôi phục hiện thực lịch sử một cách khách quan.", "D. cung cấp tri thức cho các lĩnh vực khoa học tự nhiên."], answer: 2 },
+            { id: 18, topic: "Chủ đề 1: Lịch sử và Sử học", q: "“Khôi phục các sự kiện lịch sử diễn ra trong quá khứ” là chức năng nào sau đây của Sử học?", options: ["A. Khoa học.", "B. Xã hội.", "C. Giáo dục.", "D. Dự báo."], answer: 0 },
+            { id: 19, topic: "Chủ đề 1: Lịch sử và Sử học", q: "“Giáo dục tư tưởng, tình cảm, đạo đức, rút ra những bài học kinh nghiệm cho cuộc sống hiện tại” là chức năng nào sau đây của Sử học?", options: ["A. Khoa học.", "B. Xã hội.", "C. Giáo dục.", "D. Dự báo."], answer: 2 },
+            { id: 20, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nhiệm vụ nhận thức của Sử học được thể hiện ở nội dung nào sau đây?", options: ["A. Cung cấp các tri thức khoa học về lịch sử.", "B. Giáo dục tư tưởng, tình cảm cho con người.", "C. Dự báo về tương lai của đất nước, nhân loại.", "D. Bồi đắp lòng yêu nước, tinh thần tự tôn dân tộc."], answer: 0 },
+            { id: 21, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Một trong những chức năng quan trọng của Sử học là", options: ["A. thúc đẩy xu thế toàn cầu hóa.", "B. thúc đẩy xu thế hội nhập quốc tế.", "C. khôi phục hiện thực lịch sử.", "D. tìm hiểu quá trình biến đổi tự nhiên."], answer: 2 },
+            { id: 22, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Một trong những lí do cần khám phá lịch sử suốt đời là giúp mỗi người", options: ["A. bắt kịp những công nghệ mới.", "B. làm giàu trí thức cho bản thân.", "C. hoàn thiện năng lực thẩm mĩ.", "D. hoàn thiện năng lực tính toán."], answer: 1 },
+            { id: 23, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây không phản ánh đúng lý do cần thiết phải học tập, khám phá lịch sử suốt đời?", options: ["A. Tri thức lịch sử có sự biến đổi và phát triển không ngừng.", "B. Nhiều sự kiện lịch sử trong quá khứ chưa được làm sáng tỏ.", "C. Nhu cầu đúc rút kinh nghiệm quá khứ cho cuộc sống hiện tại.", "D. Học tập lịch sử là cách duy nhất để hội nhập quốc tế thành công."], answer: 3 },
+            { id: 24, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Học tập và tìm hiểu lịch sử giúp đưa lại những cơ hội nghề nghiệp mới trên lĩnh vực nào sau đây?", options: ["A. Công nghệ thông tin.", "B. Chế biến thủy sản.", "C. Công nghiệp văn hóa.", "D. Xuất khẩu dầu mỏ."], answer: 2 },
+            { id: 25, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây phản ánh đúng ý nghĩa của tri thức lịch sử đối với cuộc sống ?", options: ["A. Góp phần hình thành lòng yêu nước và tinh thần dân tộc.", "B. Giúp những người hiểu về lịch sử đều trở thành nhà sử học.", "C. Đặt cơ sở cho sự ra đời của mọi ngành khoa học.", "D. Giúp giải quyết được mọi mâu thuẫn trong xã hội."], answer: 0 },
+            { id: 26, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Toàn bộ những tri thức, hiểu biết, suy nghĩ của con người về quá khứ được gọi là", options: ["A. hiện thực khách quan lịch sử.", "B. lịch sử được con người nhận thức.", "C. cách thức sưu tầm lịch sử.", "D. phương pháp nghiên cứu lịch sử."], answer: 1 },
+            { id: 27, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Đối tượng nghiên cứu của Sử học mang đặc điểm nào sau đây ?", options: ["A. Phổ cập.", "B. Toàn diện.", "C. Tâm linh.", "D. Hiện đại."], answer: 1 },
+            { id: 28, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Toàn bộ những hình thức khác nhau của tư liệu lịch sử, chứa đựng những thông tin về quá khứ loài người được gọi là", options: ["A. sử liệu.", "B. truyền thuyết.", "C. ngữ liệu.", "D. văn bản."], answer: 0 },
+            { id: 29, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Một trong những khâu quan trọng trong nghiên cứu, học tập, tìm hiểu lịch sử là", options: ["A. hạch toán kinh doanh.", "B. thu thập nguồn sử liệu.", "C. xây dựng phiếu điều tra.", "D. tiến hành thí nghiệm."], answer: 1 },
+            { id: 30, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Lập danh mục sử liệu cần sưu tầm; tìm kiếm, thu thập thông tin liên quan đến đối tượng tìm hiểu là các bước cơ bản của quá trình", options: ["A. xử lý thông tin sử liệu.", "B. tiến hành thí nghiệm lịch sử.", "C. sưu tầm, thu thập sử liệu.", "D. xác minh, đánh giá sử liệu."], answer: 2 },
+            { id: 31, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Phân loại, đánh giá, thẩm định, so sánh nguồn sử liệu là các bước cơ bản của quá trình", options: ["A. xử lý thông tin sử liệu.", "B. tiến hành thí nghiệm lịch sử.", "C. sưu tầm, thu thập sử liệu.", "D. tìm hiểu các di chỉ khảo cổ."], answer: 0 },
+            { id: 32, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Những bài học kinh nghiệm trong lịch sử có giá trị như thế nào đối với cuộc sống hiện tại và tương lai của con người?", options: ["A. Giúp con người kế thừa mọi yếu tố trong quá khứ.", "B. Giúp con người làm chủ hoàn toàn cuộc sống tương lai.", "C. Giúp con người tránh lặp lại sai lầm trong quá khứ.", "D. Là yếu tố quyết định đến tương lai của con người."], answer: 2 },
+            { id: 33, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Trong quá trình tìm hiểu, nghiên cứu lịch sử, việc xác minh, đánh giá nguồn sử liệu là một khâu quan trọng nhằm mục đích nào sau đây?", options: ["A. Xác định danh sách các nguồn sử liệu cần thu thập.", "B. Xác định độ tin cậy và giá trị của các nguồn sử liệu.", "C. Ghi chép thông tin liên quan đến vấn đề nghiên cứu.", "D. Chọn lọc và phân loại các nguồn sử liệu phù hợp."], answer: 1 },
+            { id: 34, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây không phải là hình thức để học tập, khám phá lịch sử?", options: ["A. Tham quan các bảo tàng.", "B. Xem các phim lịch sử.", "C. Khám phá các đại dương.", "D. Tham quan khu lưu niệm."], answer: 2 },
+            { id: 35, topic: "Chủ đề 1: Lịch sử và Sử học", q: "Nội dung nào sau đây phản ánh đúng mối liên hệ giữa kiến thức lịch sử với cuộc sống hiện tại?", options: ["A. Lịch sử giúp con người hiểu rõ hơn những vấn đề thời sự trong nước và quốc tế.", "B. Kiến thức lịch sử giúp con người thay đổi được quá khứ để hướng tới tương lai.", "C. Kiến thức lịch sử là yếu tố quyết định thành công của con người trong công việc.", "D. Lịch sử là nhân tố quyết định sự phát triển khoa học kĩ thuật của một quốc gia."], answer: 0 },
+
+            // BÀI 3 (36 - 66)
+            { id: 36, topic: "Bài 3: Vai trò của Sử học", q: "Di sản văn hóa là một bộ phận quan trọng của", options: ["A. toán học.", "B. lịch sử.", "C. công nghệ.", "D. kĩ thuật."], answer: 1 },
+            { id: 37, topic: "Bài 3: Vai trò của Sử học", q: "Di sản văn hoá là những sản phẩm tinh thần, vật chất, được lưu truyền từ thế hệ này sang thế hệ khác, có giá trị", options: ["A. lịch sử, văn hoá", "B. kinh tế, chính trị.", "C. luật pháp, văn hoá.", "D. khoa học, công nghệ."], answer: 0 },
+            { id: 38, topic: "Bài 3: Vai trò của Sử học", q: "Ngành khoa học nào sau đây góp phần quan trọng trong bảo tồn và phát huy những giá trị của di sản văn hóa phi vật thể?", options: ["A. Sinh vật học.", "B. Sử học.", "C. Y học.", "D. Giải phẫu học."], answer: 1 },
+            { id: 39, topic: "Bài 3: Vai trò của Sử học", q: "Nội dung nào sau đây không phải là biểu hiện về mối quan hệ giữa Sử học với di sản văn hóa, di sản thiên nhiên?", options: ["A. Sử học quyết định sự tồn tại của tất cả các di sản.", "B. Di sản là nguồn sử liệu cho nghiên cứu lịch sử.", "C. Sử học góp phần quảng bá hình ảnh di sản tới cộng đồng.", "D. Sử học góp phần xác định đúng các giá trị của mỗi di sản."], answer: 0 },
+            { id: 40, topic: "Bài 3: Vai trò của Sử học", q: "Các loại hình di sản văn hóa có ý nghĩa nào sau đây đối với lĩnh vực Sử học?", options: ["A. Quyết định nhất đối với sự tồn tại và phát triển của Sử học.", "B. Quyết định chính sách của Nhà nước đối với khoa học lịch sử.", "C. Là nguồn tư liệu và cơ sở để nghiên cứu, tái hiện lại lịch sử.", "D. Là nguồn sử liệu phi chính thống trong nghiên cứu lịch sử."], answer: 2 },
+            { id: 41, topic: "Bài 3: Vai trò của Sử học", q: "Nội dung nào sau đây phản ánh đúng vai trò của các loại hình di sản văn hoá đối với nghiên cứu lịch sử?", options: ["A. Là nguồn sử liệu duy nhất để tái hiện lại lịch sử.", "B. Là nguồn sử liệu phi chính thống để tham khảo.", "C. Là nguồn sử liệu thành văn có giá trị khoa học cao.", "D. Là nguồn sử liệu quan trọng để nghiên cứu lịch sử."], answer: 3 },
+            { id: 42, topic: "Bài 3: Vai trò của Sử học", q: "Nội dung nào sau đây là biểu hiện về mối quan hệ giữa Sử học với di sản văn hóa, di sản thiên nhiên?", options: ["A. Sử học quyết định sự tồn tại của tất cả các di sản văn hóa.", "B. Di sản là nguồn sử liệu thành văn cho nghiên cứu lịch sử.", "C. Nghiên cứu Sử học tạo cơ sở khoa học cho bảo tồn di sản.", "D. Di sản quyết định trực tiếp sự tồn tại của khoa học lịch sử."], answer: 2 },
+            { id: 43, topic: "Bài 3: Vai trò của Sử học", q: "Giá trị lịch sử của di sản được giữ gìn thông qua việc", options: ["A. kiểm kê.", "B. bảo tồn.", "C. xây dựng.", "D. làm mới."], answer: 1 },
+            { id: 44, topic: "Bài 3: Vai trò của Sử học", q: "Nội dung nào sao đây không phải là vai trò của Sử học đối với việc bảo tồn, phát huy giá trị di sản văn hóa, di sản thiên nhiên?", options: ["A. Sử học nghiên cứu quá trình hình thành, phát triển của di sản.", "B. Sử học giúp xác định đúng vị trí, vai trò và ý nghĩa của di sản.", "C. Sử học cung cấp thông tin phục vụ việc bảo tồn, phát huy di sản.", "D. Sử học trực tiếp quyết định chính sách bảo tồn, phát huy di sản."], answer: 3 },
+            { id: 45, topic: "Bài 3: Vai trò của Sử học", q: "Điều cốt lõi trong hoạt động bảo tồn di sản văn hóa là phải đảm bảo tính", options: ["A. kế thừa.", "B. nguyên trạng.", "C. tái tạo.", "D. nhân tạo."], answer: 1 },
+            { id: 46, topic: "Bài 3: Vai trò của Sử học", q: "Phát huy giá trị di sản là", options: ["A. Giữ nguyên dạng giá trị của di sản như ban đầu.", "B. Giữ gìn sự tồn tại của di sản theo dạng thức vốn có.", "C. Sử dụng hiệu quả giá trị của di sản trong đời sống.", "D. Khắc phục tác động xấu từ bên ngoài lên di sản."], answer: 2 },
+            { id: 47, topic: "Bài 3: Vai trò của Sử học", q: "Cơ sở khoa học cho công tác xác định giá trị, bảo tồn và phát huy giá trị đích thực của di sản là kết quả nghiên cứu của", options: ["A. Sử học.", "B. Địa lí.", "C. Văn học.", "D. Toán học."], answer: 0 },
+            { id: 48, topic: "Bài 3: Vai trò của Sử học", q: "Bảo tồn và phát huy giá trị các di sản văn hoá không phải là hoạt động", options: ["A. tiến hành xây mới các di tích, hiện đại hoá di tích.", "B. đảm bảo sự phát triển bền vững của quốc gia, dân tộc.", "C. đem lại hiệu quả thiết thực phát triển kinh tế, xã hội.", "D. hình thành ý thức trách nhiệm với cộng đồng, xã hội."], answer: 0 },
+            { id: 49, topic: "Bài 3: Vai trò của Sử học", q: "Nội dung nào sau đây phản ánh không đúng vai trò của công tác bảo tồn và phát huy giá trị di sản văn hoá, di sản thiên nhiên?", options: ["A. Là cách duy nhất để quảng bá lịch sử, văn hóa của đất nước ra bên ngoài.", "B. Góp phần khắc phục những tác động tiêu cực của tự nhiên đối với di sản.", "C. Góp phần gìn giữ và lưu truyền di sản văn hoá phi vật thể cho thế hệ sau.", "D. Giáo dục con người nhớ về cội nguồn và trách nhiệm với tổ tiên, cộng đồng."], answer: 0 },
+            { id: 50, topic: "Bài 3: Vai trò của Sử học", q: "Nội dung nào sau đây phản ánh đúng vai trò của công tác bảo tồn các di sản văn hóa phi vật thể?", options: ["A. Góp phần khắc phục những tác động tiêu cực của tự nhiên đối với di sản.", "B. Giúp giữ gìn và lưu truyền giá trị của di sản từ thế hệ này sang thế hệ khác.", "C. Góp phần ngăn chặn tình trạng xuống cấp, biến dạng và hư hỏng của di sản.", "D. Tạo nhấn tố quyết định cho sự phát triển của kinh tế, xã hội của địa phương."], answer: 1 },
+            { id: 51, topic: "Bài 3: Vai trò của Sử học", q: "Nội dung nào sau đây phản ánh đúng vai trò của công tác bảo tồn các di sản thiên nhiên?", options: ["A. Hình thành ý thức hướng về cội nguồn.", "B. Giúp duy trì kí ức và bản sắc cộng đồng.", "C. Góp phần giáo dục truyền thống yêu nước.", "D. Góp phần phát triển sự đa dạng sinh học."], answer: 3 },
+            { id: 52, topic: "Bài 3: Vai trò của Sử học", q: "Một trong những di sản văn hóa phi vật thể tiêu biểu của Việt Nam là", options: ["A. Đờn ca tài tử Nam Bộ.", "B. Hoàng thành Thăng Long.", "C. Mộc bản triều Nguyễn.", "D. phố cổ Hội An."], answer: 0 },
+            { id: 53, topic: "Bài 3: Vai trò của Sử học", q: "Bảo tồn và phát huy giá trị các di sản văn hoá là hoạt động", options: ["A. tìm kiếm, lưu giữ và bảo vệ các giá trị di sản.", "B. phát triển và lan toả các giá trị di sản.", "C. lưu giữ, bảo vệ và lan toả các giá trị của di sản.", "D. quy hoạch, lưu giữ và bảo vệ các di sản."], answer: 2 },
+            { id: 54, topic: "Bài 3: Vai trò của Sử học", q: "Ngày 24 - 11 - 2005, Thủ tướng Chính phủ Việt Nam ra Quyết định số 36/2005/QĐ-TTg, lấy ngày 23 - 11 hàng năm là “Ngày Di sản Văn hóa Việt Nam” nhằm giáo dục và phát huy truyền thống nào sau đây của dân tộc ta?", options: ["A. Đoàn kết quyết tâm phấn đấu giữ vững những công trình văn hóa hiện đại.", "B. Trung thực, tự tôn dân tộc và ý thức trách nhiệm của công dân toàn cầu.", "C. Yêu nước, tự hào dân tộc, ý thức trách nhiệm trong việc bảo vệ di sản văn hóa.", "D. Phát huy sức mạnh đại đoàn kết dân tộc trong công tác tôn tạo di sản văn hóa."], answer: 2 },
+            { id: 55, topic: "Bài 3: Vai trò của Sử học", q: "Lĩnh vực nào sau đây đóng vai trò quan trọng trực tiếp đối với sự phát triển của ngành công nghiệp văn hóa?", options: ["A. Thiên văn học.", "B. Y học.", "C. Sử học.", "D. Địa lí."], answer: 2 },
+            { id: 56, topic: "Bài 3: Vai trò của Sử học", q: "Các di tích lịch sử - văn hóa của Việt Nam là một thế mạnh để phát triển", options: ["A. nông nghiệp bền vững.", "B. chế biến nông sản.", "C. du lịch.", "D. lâm nghiệp."], answer: 2 },
+            { id: 57, topic: "Bài 3: Vai trò của Sử học", q: "Đọc đoạn tư liệu sau: \"Du lịch là một lĩnh vực tăng trưởng tiềm năng cho nền kinh tế châu Âu, tạo ra hơn 10% GDP của EU... Di sản độc đáo bao gồm: bảo tàng, nhà hát, di tích khảo cổ học và các thành phố lịch sử…đã khiến châu lục này trở thành điểm du lịch chính\". Nội dung chủ đạo đoạn tư liệu đề cập đến là", options: ["A. vai trò của lịch sử - văn hoá đối với sự phát triển của du lịch.", "B. tốc độ phát triển của ngành du lịch ở châu Âu trong tương lai.", "C. vai trò của du lịch đối với công tác bảo tồn các di sản văn hóa.", "D. vai trò của công tác bảo tồn các di sản văn hóa đối với du lịch."], answer: 0 },
+            { id: 58, topic: "Bài 3: Vai trò của Sử học", q: "Điền từ còn thiếu vào vị trí (1) đến (5): Yếu tố hàng đầu của (1) chính là sức hấp dẫn của (2), bao gồm các yếu tố về (3), văn hoá truyền thống, (4), tín ngưỡng, (5)...", options: ["A. 1. D - 2. A - 3. E - 4. B - 5. C", "B. 1. A - 2. B - 3. C - 4. D - 5. E", "C. 1. E - 2. D - 3. C - 4. B - 5. A", "D. 1. B - 2. C - 3. A - 4. E - 5. D"], answer: 0 },
+            { id: 59, topic: "Bài 3: Vai trò của Sử học", q: "Cung cấp bài học kinh nghiệm, hình thành ý tưởng để lên kế hoạch, xây dựng chiến lược phát triển ngành du lịch là một trong những vai trò của ngành nào dưới đây?", options: ["A. Lịch sử và văn hóa.", "B. Văn học và lịch sử.", "C. Khảo cổ và văn học", "D. Thiên văn và lịch sử."], answer: 0 },
+            { id: 60, topic: "Bài 3: Vai trò của Sử học", q: "Đọc đoạn tư liệu về doanh thu du lịch Việt Nam từ 1990 đến 2019. Đoạn tư liệu nhấn mạnh vai trò của ngành nào đối với sự phát triển kinh tế đất nước?", options: ["A. Công nghiệp.", "B. Du lịch.", "C. Điện ảnh.", "D. Khai thác."], answer: 1 },
+            { id: 61, topic: "Bài 3: Vai trò của Sử học", q: "Trong việc phát triển du lịch, yếu tố nào sau đây có vai trò đặc biệt quan trọng?", options: ["A. Kết quả hoạt động trong quá khứ của ngành du lịch.", "B. Hoạt động sản xuất của các nhà máy, xí nghiệp.", "C. Những giá trị về lịch sử, văn hoá truyền thống.", "D. Sự đổi mới, xây dựng lại các công trình di sản."], answer: 2 },
+            { id: 62, topic: "Bài 3: Vai trò của Sử học", q: "Nội dung nào sao đây không phản ánh đúng vai trò của lịch sử - văn hóa đối với du lịch?", options: ["A. Là di sản, tài nguyên quý giá để phát triển du lịch.", "B. Tạo sức hấp dẫn to lớn để thu hút khách du lịch.", "C. Giúp con người hưởng thụ giá trị của di sản văn hóa.", "D. Là yếu tố quyết định duy nhất sự phát triển du lịch."], answer: 3 },
+            { id: 63, topic: "Bài 3: Vai trò của Sử học", q: "Sự phát triển của du lịch có ý nghĩa nào sau đây đối với công tác bảo tồn di tích lịch sử - văn hóa?", options: ["A. định hướng sự phát triển của Sử học trong tương lai.", "B. Xác định chức năng, nhiệm vụ của khoa học lịch sử.", "C. cung cấp bài học kinh nghiệm cho các nhà sử học.", "D. quảng bá lịch sử, văn hoá cộng đồng ra bên ngoài."], answer: 3 },
+            { id: 64, topic: "Bài 3: Vai trò của Sử học", q: "Nội dung nào sau đây không phản ánh đúng tác động của du lịch đối với công tác bảo tồn di tích lịch sử - văn hóa?", options: ["A. Góp phần quảng bá rộng rãi giá trị di tích lịch sử - văn hóa ra bên ngoài.", "B. Bồi đắp ý thức trách nhiệm bảo vệ di tích lịch sử - văn hóa của cộng đồng.", "C. Tạo ra nguồn kinh phí hỗ trợ công tác bảo tồn và phát huy giá trị các di sản.", "D. Ngăn cản tác động xấu của thiên nhiên và con người lên các di sản văn hóa."], answer: 3 },
+            { id: 65, topic: "Bài 3: Vai trò của Sử học", q: "Theo Luật Du lịch Việt Nam năm 2010, địa danh nào sau đây ở không thuộc tài nguyên du lịch văn hóa?", options: ["A. Cố đô Huế.", "B. Thánh địa Mỹ Sơn.", "C. Vịnh Hạ Long.", "D. Dinh Độc Lập."], answer: 2 },
+            { id: 66, topic: "Bài 3: Vai trò của Sử học", q: "Nội dung nào sao đây không phải là biện pháp để bảo tồn và phát huy giá trị di sản văn hóa?", options: ["A. Tăng cường tuyên truyền, phổ biến, giáo dục pháp luật.", "B. Nâng cao hiệu quả quản lý nhà nước về di sản văn hóa.", "C. Phát huy vai trò của cộng đồng trong bảo tồn di sản.", "D. Làm mới hoàn toàn các di sản văn hóa bị xuống cấp."], answer: 3 },
+
+            // BÀI 4 (67 - 140)
+            { id: 67, topic: "Bài 4: Văn minh Phương Đông", q: "Toàn bộ những giá trị vật chất và tinh thần do con người sáng tạo ra trong quá trình lịch sử được gọi là", options: ["A. văn minh.", "B. văn hóa.", "C. chữ viết.", "D. nhà nước."], answer: 1 },
+            { id: 68, topic: "Bài 4: Văn minh Phương Đông", q: "Sự tiến bộ về vật chất và tinh thần của xã hội loài người, trạng thái phát triển cao của văn hóa được gọi là", options: ["A. trí tuệ.", "B. văn minh.", "C. xã hội.", "D. đẳng cấp."], answer: 1 },
+            { id: 69, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây là yếu tố cơ bản để xác định loài người bước vào thời kì văn minh?", options: ["A. Chữ viết, nhà nước.", "B. Tín ngưỡng, tôn giáo.", "C. Công cụ bằng đá.", "D. Nguyên tắc công bằng."], answer: 0 },
+            { id: 70, topic: "Bài 4: Văn minh Phương Đông", q: "Văn hoá là tổng thể những giá trị vật chất và tinh thần do con người sáng tạo ra", options: ["A. trong tiến trình lịch sử.", "B. sau khi đã có chữ viết.", "C. sau khi xuất hiện nhà nước.", "D. trong các cuộc chiến tranh."], answer: 0 },
+            { id: 71, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây phản ánh đúng điểm tương đồng giữa văn hóa và văn minh?", options: ["A. Đều mang đậm bản sắc riêng của tộc người và có tính khép kín.", "B. Đều phản ánh những tiến bộ vượt bậc về khoa học học và kĩ thuật.", "C. Đều là những giá trị vật chất và tinh thần do con người sáng tạo nên.", "D. Đều bắt đầu xuất hiện khi con người biết sử dụng công cụ bằng sắt."], answer: 2 },
+            { id: 72, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây phản ánh đúng điểm khác biệt của văn minh so với văn hóa?", options: ["A. Văn minh ra đời trước văn hóa và hoàn toàn độc lập với văn hóa.", "B. Văn minh chỉ xuất hiện khi con người biết chế tạo công cụ lao động.", "C. Văn minh xuất hiện đồng thời với sự xuất hiện con người trên trái đất.", "D. Văn minh chỉ được sáng tạo trong thời kì phát triển cao của xã hội."], answer: 3 },
+            { id: 73, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây không phản ánh đúng đặc điểm của văn minh?", options: ["A. Có tiêu chuẩn cơ bản để nhận diện là nhà nước.", "B. Ra đời trước văn hóa và tồn tại độc lập với văn hóa.", "C. Ra đời sau văn hóa và có liên hệ chặt chẽ với văn hóa.", "D. Là những giá trị vật chất, tinh thần do con người sáng tạo."], answer: 1 },
+            { id: 74, topic: "Bài 4: Văn minh Phương Đông", q: "Một trong những nền văn minh tiêu biểu của phương Đông thời kì cổ - trung đại là", options: ["A. Hy Lạp.", "B. Rô – ma.", "C. Ấn Độ.", "D. La Mã."], answer: 2 },
+            { id: 75, topic: "Bài 4: Văn minh Phương Đông", q: "Thành tựu của nền văn minh Ai Cập cổ đại được hình thành và phát triển gắn với con sông nào sau đây?", options: ["A. Trường Giang.", "B. Hoàng Hà.", "C. Sông Hằng.", "D. Sông Nin."], answer: 3 },
+            { id: 76, topic: "Bài 4: Văn minh Phương Đông", q: "Nền văn minh Ai Cập cổ đại được hình thành ở châu lục nào sau đây?", options: ["A. Châu Phi.", "B. Châu Á.", "C. Châu Âu.", "D. Châu Mĩ."], answer: 0 },
+            { id: 77, topic: "Bài 4: Văn minh Phương Đông", q: "Cư dân Ai Cập cổ đại đã sớm tạo ra chữ viết riêng của mình, gọi là chữ", options: ["A. La – tinh.", "B. Hán Nôm.", "C. tượng hình.", "D. Quốc ngữ."], answer: 2 },
+            { id: 78, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây là nguồn gốc dẫn đến sự xuất hiện sớm của chữ viết ở Ai Cập thời kì cổ đại?", options: ["A. Nhu cầu ghi chép và lưu trữ những gì đã diễn ra.", "B. Nhu cầu của sản xuất nông nghiệp đúng thời vụ.", "C. Nhu cầu sáng tác các tác phẩm văn học nghệ thuật.", "D. Nhu cầu đo đạc lại ruộng đất theo định kì hàng năm."], answer: 0 },
+            { id: 79, topic: "Bài 4: Văn minh Phương Đông", q: "Sự ra đời của chữ viết Ai Cập thời kì cổ đại có ý nghĩa nào sau đây?", options: ["A. Phản ánh trình độ tư duy cao của cư dân Ai Cập.", "B. Tạo cơ sở cho sự ra đời của chữ La – tinh sau này.", "C. Tạo cơ sở để cư dân Ai Cập cổ đại hội nhập quốc tế.", "D. Phản ánh sự phát triển cao độ của nhà nước chuyên chế."], answer: 0 },
+            { id: 80, topic: "Bài 4: Văn minh Phương Đông", q: "Thành tựu về lĩnh vực nào sau đây của cư dân Ai Cập cổ đại đã được ứng dụng hiệu quả trong việc xây dựng kim tự tháp?", options: ["A. Tôn giáo.", "B. Toán học.", "C. Tín ngưỡng.", "D. Chữ viết."], answer: 1 },
+            { id: 81, topic: "Bài 4: Văn minh Phương Đông", q: "Những thành tựu về toán học của cư dân Ai Cập cổ đại đã được ứng dụng rộng rãi trong việc", options: ["A. sáng tác văn học.", "B. hội nhập quốc tế.", "C. đo đạc ruộng đất.", "D. phân chia đẳng cấp."], answer: 2 },
+            { id: 82, topic: "Bài 4: Văn minh Phương Đông", q: "Một trong những nguyên nhân dẫn đến sự ra đời sớm của ngành lịch pháp và thiên văn ở Ai Cập cổ đại là do", options: ["A. nhu cầu sản xuất trong nông nghiệp.", "B. nhu cầu tính toán trong xây dựng.", "C. nhu cầu ghi chép và lưu trữ thông tin.", "D. nhu cầu hội nhập quốc tế sâu rộng."], answer: 0 },
+            { id: 83, topic: "Bài 4: Văn minh Phương Đông", q: "Yếu tố nào sau đây thúc đẩy sự ra đời sớm của những tri thức toán học ở Ai Cập cổ đại?", options: ["A. Nhu cầu sáng tác văn học nghệ thuật.", "B. Nhu cầu tính toán trong xây dựng.", "C. Nhu cầu phát triển sản xuất nông nghiệp.", "D. Nhu cầu phát triển thương nghiệp."], answer: 1 },
+            { id: 84, topic: "Bài 4: Văn minh Phương Đông", q: "Kĩ thuật ướp xác là một trong những thành tựu tiêu biểu của văn minh Ai Cập trên lĩnh vực nào sau đây?", options: ["A. Thiên văn.", "B. Y học.", "C. Văn học.", "D. Kiến trúc."], answer: 1 },
+            { id: 85, topic: "Bài 4: Văn minh Phương Đông", q: "Kim tự tháp là công trình kiến trúc tiêu biểu của nền văn minh cổ đại nào sau đây?", options: ["A. La Mã.", "B. Trung Quốc.", "C. Hy Lạp.", "D. Ai Cập."], answer: 3 },
+            { id: 86, topic: "Bài 4: Văn minh Phương Đông", q: "Đối với thế giới, những thành tựu của nền văn minh Ai Cập cổ đại có ý nghĩa nào sau đây?", options: ["A. Thể hiện trí tuệ và sự sáng tạo vĩ đại của cư dân Ai Cập.", "B. Tạo tiền đề cho sự phát triển của văn minh Ai Cập sau này.", "C. Tạo cơ sở cho sự phát triển văn minh nhân loại trên nhiều mặt.", "D. Chứng tỏ sự phát triển rực rỡ và toàn diện của văn minh Ai Cập."], answer: 2 },
+            { id: 87, topic: "Bài 4: Văn minh Phương Đông", q: "Nền văn minh Ấn Độ thời kì cổ - trung đại được hình thành ở lưu vực con sông nào sau đây?", options: ["A. Sông Hằng.", "B. Sông Nin.", "C. Sông Hoàng Hà.", "D. Sông Trường Giang."], answer: 0 },
+            { id: 88, topic: "Bài 4: Văn minh Phương Đông", q: "Nền văn minh Ấn Độ cổ - trung đại được hình thành ở châu lục nào sau đây?", options: ["A. Châu Phi.", "B. Châu Á.", "C. Châu Âu.", "D. Châu Mĩ."], answer: 1 },
+            { id: 89, topic: "Bài 4: Văn minh Phương Đông", q: "Cư dân Ấn Độ đã sớm tạo ra chữ viết riêng của mình, gọi là chữ", options: ["A. La – tinh.", "B. Hán.", "C. Phạn.", "D. Nôm."], answer: 2 },
+            { id: 90, topic: "Bài 4: Văn minh Phương Đông", q: "Chữ viết của Ấn Độ có ảnh hưởng sâu sắc đến chữ viết của nhiều quốc gia ở khu vực", options: ["A. Đông Nam Á.", "B. Đông Bắc Á.", "C. Mĩ La – tinh.", "D. Đông Nam Âu."], answer: 0 },
+            { id: 91, topic: "Bài 4: Văn minh Phương Đông", q: "Sự ra đời của chữ viết đã tạo cơ sở cho nền văn minh Ấn Độ phát triển rực rỡ trên lĩnh vực nào sau đây?", options: ["A. Kiến trúc .", "B. Điêu khắc.", "C. Tín ngưỡng.", "D. Văn học."], answer: 3 },
+            { id: 92, topic: "Bài 4: Văn minh Phương Đông", q: "Tác phẩm nào sau đây không phải thành tựu văn học của Ấn Độ thời cổ - trung đại?", options: ["A. Kinh Vê - đa.", "B. Tây du kí.", "C. Ra–ma–y–a-na.", "D. Ma–ha–bha–ra-ta."], answer: 1 },
+            { id: 93, topic: "Bài 4: Văn minh Phương Đông", q: "Phật giáo có nguồn gốc từ quốc gia nào sau đây?", options: ["A. Mianma.", "B. Ấn Độ.", "C. Anh.", "D. Pháp."], answer: 1 },
+            { id: 94, topic: "Bài 4: Văn minh Phương Đông", q: "Tôn giáo nào sau đây không được khởi nguồn từ Ấn Độ?", options: ["A. Hồi giáo.", "B. Phật giáo.", "C. Hin-đu giáo.", "D. Bà La Môn giáo."], answer: 0 },
+            { id: 95, topic: "Bài 4: Văn minh Phương Đông", q: "Tôn giáo nào sau đây ra đời ở Ấn Độ, do Thích Ca Mâu Ni khởi xướng?", options: ["A. Hồi giáo.", "B. Phật giáo.", "C. Hin-đu giáo.", "D. Bà La Môn giáo."], answer: 1 },
+            { id: 96, topic: "Bài 4: Văn minh Phương Đông", q: "Trong quá trình tồn tại và phát triển, văn minh Ấn Độ đã du nhập tôn giáo nào sau đây từ bên ngoài?", options: ["A. Hồi giáo.", "B. Phật giáo.", "C. Hin-đu giáo.", "D. Bà La Môn giáo."], answer: 0 },
+            { id: 97, topic: "Bài 4: Văn minh Phương Đông", q: "Loại hình kiến trúc Phật giáo tiêu biểu của văn minh Ấn Độ thời cổ - trung đại là", options: ["A. pháo đài.", "B. lăng mộ.", "C. chùa hang.", "D. thánh đường."], answer: 2 },
+            { id: 98, topic: "Bài 4: Văn minh Phương Đông", q: "Lăng ta-giơ Ma-han, Pháo đài Đỏ là những thành tựu tiêu biểu của văn minh Ấn Độ trên lĩnh vực nào sau đây?", options: ["A. Văn học.", "B. Y học.", "C. Toán học.", "D. Kiến trúc."], answer: 3 },
+            { id: 99, topic: "Bài 4: Văn minh Phương Đông", q: "Phát minh ra chữ số tự nhiên và số 0 là thành tựu nổi bật của nền văn minh nào sau đây?", options: ["A. Ai Cập.", "B. Ấn Độ.", "C. Trung Quốc.", "D. Lưỡng Hà."], answer: 1 },
+            { id: 100, topic: "Bài 4: Văn minh Phương Đông", q: "“Tính được căn bậc 2 và bậc 3, tính được diện tích các hình tiêu biểu” là thành tựu tiêu biểu của văn minh Ấn Độ trên lĩnh vực nào sau đây?", options: ["A. Kiến trúc.", "B. Điêu khắc.", "C. Y học.", "D. Toán học."], answer: 3 },
+            { id: 101, topic: "Bài 4: Văn minh Phương Đông", q: "Ấn Độ là quê hương của những tôn giáo lớn nào sau đây?", options: ["A. Phật giáo, Đạo giáo.", "B. Phật giáo, Hin-đu giáo.", "C. Thiên Chúa giáo, Hồi giáo.", "D. Phật giáo, Hồi giáo."], answer: 1 },
+            { id: 102, topic: "Bài 4: Văn minh Phương Đông", q: "Văn hoá truyền thống Ấn Độ có ảnh hưởng rõ nét nhất ở khu vực nào sau đây?", options: ["A. Đông Bắc Á.", "B. Trung Đông.", "C. Đông Nam Á.", "D. Tây Á."], answer: 2 },
+            { id: 103, topic: "Bài 4: Văn minh Phương Đông", q: "Cư dân quốc gia cổ đại nào sau đây đã phát minh ra chữ số 0?", options: ["A. Ai Cập.", "B. Trung Quốc.", "C. Ấn Độ.", "D. La Mã."], answer: 2 },
+            { id: 104, topic: "Bài 4: Văn minh Phương Đông", q: "Thành tựu nào sau đây của Ấn Độ là di sản văn hóa thế giới?", options: ["A. Lăng Ta-giơ Ma-han.", "B. Vạn lí trường thành.", "C. Kim tự tháp.", "D. Hoàng thành Thăng Long."], answer: 0 },
+            { id: 105, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây là đặc điểm chung của các nền văn minh Ấn Độ và Trung Hoa thời kì cổ - trung đại?", options: ["A. Theo chế độ quân chủ lập hiến.", "B. Hình thành gắn với các dòng sông lớn.", "C. Xây dựng được nhiều kim tự tháp.", "D. Hình thành gắn với các cuộc chiến tranh."], answer: 1 },
+            { id: 106, topic: "Bài 4: Văn minh Phương Đông", q: "Một trong những thành tựu của văn minh Ấn Độ và Trung Hoa thời kì cổ - trung đại là", options: ["A. sớm sáng tạo ra chữ viết riêng của mình.", "B. kĩ thuật ướp xác và xây dựng kim tự tháp.", "C. xây dựng được chế độ dân chủ cộng hòa.", "D. nơi khởi nguồn và phát triển của Phật giáo."], answer: 0 },
+            { id: 107, topic: "Bài 4: Văn minh Phương Đông", q: "Lĩnh vực nào sau đây của nền văn minh Ấn Độ thời kì cổ - trung đại có ảnh hưởng lớn đến Việt Nam?", options: ["A. Y học.", "B. Tư tưởng.", "C. Kiến trúc.", "D. Sử học."], answer: 1 },
+            { id: 108, topic: "Bài 4: Văn minh Phương Đông", q: "Đến nay, thành tựu thuộc lĩnh vực nào sau đây của cư dân Ấn Độ từ thời cổ đại còn được ứng dụng rộng rãi trong nhiều ngành khoa học?", options: ["A. Toán học.", "B. Kĩ thuật in.", "C. Văn học.", "D. Sử học."], answer: 0 },
+            { id: 109, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây không phản ánh đúng điểm tương đồng giữa văn minh Ai Cập cổ đại với văn minh Ấn Độ cổ - trung đại?", options: ["A. Là nơi khởi nguồn của nhiều tôn giáo lớn.", "B. Thành tựu phong phú, đa dạng trên nhiều mặt.", "C. Có nền kinh tế nông nghiệp là chủ đạo.", "D. Sớm tạo ra chữ viết riêng của dân tộc mình."], answer: 0 },
+            { id: 110, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây không phản ánh đúng ý nghĩa của nền văn minh Ấn Độ thời kì cổ - trung đại?", options: ["A. Có ảnh hưởng đến văn minh của nhiều quốc gia khác trên thế giới.", "B. Tạo cơ sở và nền tảng cho sự phát triển của văn hóa Ấn Độ sau này.", "C. Chứng minh sự sáng tạo phi thường của cư dân Ấn Độ cổ trung đại.", "D. Tạo cơ sở cho sự hình thành và phát triển của văn minh Phục Hưng."], answer: 3 },
+            { id: 111, topic: "Bài 4: Văn minh Phương Đông", q: "Những thành tựu của nền văn minh Ai Cập cổ đại và văn minh Ấn Độ thời kì cổ - trung đại đều", options: ["A. đóng góp cho sự phát triển của văn minh thế giới.", "B. ảnh hưởng sâu rộng đến văn minh Đông Nam Á.", "C. tạo tiền đề cho sự phát triển của văn minh Hy Lạp.", "D. tạo cơ sở thúc đẩy xu thế toàn cầu hóa phát triển."], answer: 0 },
+            { id: 112, topic: "Bài 4: Văn minh Phương Đông", q: "Sự hình thành và phát triển của nền văn minh Trung Hoa thời cổ - trung đại gắn liền với con sông nào sau đây?", options: ["A. Sông Ấn.", "B. Sông Hoàng Hà.", "C. Sông Nin.", "D. Sông Hằng."], answer: 1 },
+            { id: 113, topic: "Bài 4: Văn minh Phương Đông", q: "Nền văn minh Trung Hoa cổ - trung đại được hình thành ở châu lục nào sau đây?", options: ["A. Châu Phi.", "B. Châu Á.", "C. Châu Âu.", "D. Châu Mĩ."], answer: 1 },
+            { id: 114, topic: "Bài 4: Văn minh Phương Đông", q: "Một trong những chữ viết cổ do người Trung Quốc sáng tạo ra là", options: ["A. chữ Nôm.", "B. chữ Phạn.", "C. chữ Kim văn.", "D. chữ La – tinh."], answer: 2 },
+            { id: 115, topic: "Bài 4: Văn minh Phương Đông", q: "Chữ tượng hình của người Trung Hoa khắc trên mai rùa, xương thú được gọi là", options: ["A. Chữ Tiểu triện.", "B. Chữ Đại Triện.", "C. Chữ Lệ thư.", "D. Chữ Giáp cốt."], answer: 3 },
+            { id: 116, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây phản ánh đúng đặc điểm về chữ viết của cư dân Trung Hoa thời kì cổ - trung đại?", options: ["A. Tiếp thu sáng tạo thành tựu chữ viết bên ngoài.", "B. Ảnh hưởng đến tất cả các quốc gia trên thế giới.", "C. Tạo nền tảng cho hệ chữ viết La – tinh ngày nay.", "D. Chữ viết nhiều lần được chỉnh lý và phát triển."], answer: 3 },
+            { id: 117, topic: "Bài 4: Văn minh Phương Đông", q: "Chữ viết của văn minh Trung Quốc ảnh hưởng sâu sắc đến chữ viết của quốc gia nào sau đây?", options: ["A. Ấn Độ.", "B. Ai Cập.", "C. Việt Nam.", "D. Hy Lạp."], answer: 2 },
+            { id: 118, topic: "Bài 4: Văn minh Phương Đông", q: "Lý Bạch, Đỗ Phủ, Bạch Cư Dị là những tác giả văn học nổi tiếng của văn minh Trung Hoa với thể loại nào sau đây?", options: ["A. Tiểu thuyết.", "B. Thơ Đường.", "C. Truyện ngắn.", "D. Phóng sự."], answer: 1 },
+            { id: 119, topic: "Bài 4: Văn minh Phương Đông", q: "Loại hình văn học nào sau đây ở Trung Quốc phát triển mạnh mẽ dưới thời kì Minh – Thanh?", options: ["A. Tiểu thuyết chương hồi.", "B. Ca dao, tục ngữ.", "C. Truyện ngắn, phóng sự.", "D. thơ ca, phú, kịch."], answer: 0 },
+            { id: 120, topic: "Bài 4: Văn minh Phương Đông", q: "Tác phẩm nào sau đây không phải thành tựu văn học của Trung Quốc thời cổ - trung đại?", options: ["A. l-li-át.", "B. Tây du kí.", "C. Hồng lâu mộng.", "D. Thủy hử."], answer: 0 },
+            { id: 121, topic: "Bài 4: Văn minh Phương Đông", q: "“Tứ đại danh tác” của nền văn học Trung Quốc thời Minh, Thanh là", options: ["A. Tây du ký, Thuỷ hử, Hồng lâu mộng, Liêu trai chí dị.", "B. Tây du ký, Thuỷ hử, Đông Chu liệt quốc, Tam quốc diễn nghĩa.", "C. Tây du ký, Kim Vân Kiều, Hồng lâu mộng, Tam quốc diễn nghĩa.", "D. Tây du ký, Thuỷ hử, Hồng lâu mộng, Tam quốc diễn nghĩa."], answer: 3 },
+            { id: 122, topic: "Bài 4: Văn minh Phương Đông", q: "Tác phẩm văn học nào sau đây của Trung Quốc là một bộ tổng hợp thơ ca dân gian, đồng thời là một trong năm bộ kinh điển của Nho giáo?", options: ["A. Tây du kí.", "B. Hồng lâu mộng.", "C. Kinh Thi.", "D. Thủy hử."], answer: 2 },
+            { id: 123, topic: "Bài 4: Văn minh Phương Đông", q: "Văn học Trung Hoa có ảnh hưởng sâu sắc đến văn học của châu lục nào sau đây?", options: ["A. Châu Âu.", "B. Châu Phi.", "C. Châu Mĩ.", "D. Châu Á."], answer: 3 },
+            { id: 124, topic: "Bài 4: Văn minh Phương Đông", q: "Trung Quốc là nơi khởi nguồn của tôn giáo nào sau đây?", options: ["A. Phật giáo", "B. Đạo giáo.", "C. Hồi giáo.", "D. Thiên chúa giáo."], answer: 1 },
+            { id: 125, topic: "Bài 4: Văn minh Phương Đông", q: "Học thuyết nào sau đây đã trở thành hệ tư tưởng chính thống của chế độ quân chủ chuyên chế ở Trung Quốc?", options: ["A. Đạo giáo.", "B. Phật giáo.", "C. Nho giáo.", "D. Hồi giáo."], answer: 2 },
+            { id: 126, topic: "Bài 4: Văn minh Phương Đông", q: "Trong quá trình tồn tại và phát triển, văn minh Trung Quốc đã tiếp thu Phật giáo từ quốc gia nào sau đây?", options: ["A. Ấn Độ.", "B. Ai Cập.", "C. Hy Lạp.", "D. La Mã."], answer: 0 },
+            { id: 127, topic: "Bài 4: Văn minh Phương Đông", q: "Hệ tư tưởng Nho giáo của Trung Hoa có ảnh hưởng sâu sắc đến quốc gia nào sau đây?", options: ["A. Rô–ma.", "B. Nhật Bản.", "C. Ai Cập.", "D. La Mã."], answer: 1 },
+            { id: 128, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây phản ánh đúng ý nghĩa của hệ tư tưởng Nho giáo của nền văn minh Trung Hoa?", options: ["A. Tạo cơ sở phát triển cho nền văn minh phương Tây.", "B. Nền tảng tư tưởng của chế độ quân chủ Trung Hoa.", "C. Thúc đẩy sự phát triển mạnh mẽ của thương nghiệp.", "D. Tạo cơ sở cho sự phát triển của khoa học kĩ thuật."], answer: 1 },
+            { id: 129, topic: "Bài 4: Văn minh Phương Đông", q: "Nhận định nào sau đây phản ánh không đúng về giá trị của Nho giáo ở Trung Hoa thời kì cổ - trung đại?", options: ["A. Hệ tư tưởng của giai cấp thống trị thời phong kiến.", "B. Góp phần đào tạo nhân tài phục vụ cho đất nước.", "C. Giáo dục nhân cách, đạo đức cho con người.", "D. Thúc đẩy sự phát triển kinh tế tư bản chủ nghĩa."], answer: 3 },
+            { id: 130, topic: "Bài 4: Văn minh Phương Đông", q: "Một trong những bộ Sử học nổi tiếng của Trung Hoa thời kì cổ - trung đại là", options: ["A. I–li–át.", "B. Ra–ma–y–a–na.", "C. Sử ký.", "D. Đại Việt sử ký toàn thư."], answer: 2 },
+            { id: 131, topic: "Bài 4: Văn minh Phương Đông", q: "Thập Tam Lăng, Tử Cấm Thành là những thành tựu tiêu biểu của văn minh Trung Hoa trên lĩnh vực nào sau đây?", options: ["A. Toán học.", "B. Kiến trúc.", "C. Văn học.", "D. Kĩ thuật."], answer: 1 },
+            { id: 132, topic: "Bài 4: Văn minh Phương Đông", q: "Thành tựu nào sau đây của Trung Quốc là di sản văn hóa thế giới?", options: ["A. Tháp Thạt Luổng.", "B. Vạn lí trường thành.", "C. Kim tự tháp.", "D. Đền Pác tê nông."], answer: 1 },
+            { id: 133, topic: "Bài 4: Văn minh Phương Đông", q: "“Sử dụng hệ số đếm thập phân, tính được diện tích các hình phẳng” là thành tựu của văn minh Trung Hoa trên lĩnh vực nào sau đây?", options: ["A. Kiến trúc.", "B. Điêu khắc.", "C. Toán học.", "D. Y học."], answer: 2 },
+            { id: 134, topic: "Bài 4: Văn minh Phương Đông", q: "Một trong những phát minh lớn về kĩ thuật của người Trung Hoa thời cổ đại là", options: ["A. máy tính điện tử.", "B. kĩ thuật in.", "C. động cơ hơi nước.", "D. động cơ điện."], answer: 1 },
+            { id: 135, topic: "Bài 4: Văn minh Phương Đông", q: "Phát minh kĩ thuật nào sau đây của người Trung Hoa có ảnh hưởng lớn đến sự phát triển của ngành hàng hải?", options: ["A. La bàn.", "B. Thuốc súng.", "C. Kĩ thuật in.", "D. Làm giấy."], answer: 0 },
+            { id: 136, topic: "Bài 4: Văn minh Phương Đông", q: "Thành tựu nào sau đây không phải là phát minh quan trọng về kĩ thuật của người Trung Hoa thời kì cổ - trung đại?", options: ["A. Làm giấy.", "B. Động cơ đốt trong.", "C. Thuốc súng.", "D. La bàn."], answer: 1 },
+            { id: 137, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây là điểm chung của nền văn minh Ấn Độ và văn minh Trung Hoa thời kì cổ - trung đại?", options: ["A. Là quê hương của một số tôn giáo lớn.", "B. Tiếp thu sáng tạo chữ viết từ bên ngoài.", "C. Có nền kinh tế thương nghiệp là chủ đạo.", "D. Đều thiết lập chế độ quân chủ lập hiến."], answer: 0 },
+            { id: 138, topic: "Bài 4: Văn minh Phương Đông", q: "Cư dân phương Đông cổ đại sáng tạo ra lịch từ yêu cầu của", options: ["A. chinh phục vũ trụ.", "B. sản xuất thủ công nghiệp.", "C. sản xuất nông nghiệp.", "D. thiên văn học ."], answer: 2 },
+            { id: 139, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây là điểm khác biệt giữa văn minh Trung Hoa thời kì cổ - trung đại với văn minh Ai Cập thời kì cổ đại?", options: ["A. Có nền kinh tế nông nghiệp là chủ đạo.", "B. Thành tựu văn minh đa dạng, phong phú.", "C. Lấy Nho giáo là hệ tư tưởng chính thống.", "D. Sớm sáng tạo ra chữ viết riêng của dân tộc."], answer: 2 },
+            { id: 140, topic: "Bài 4: Văn minh Phương Đông", q: "Nội dung nào sau đây phản ánh không đúng ý nghĩa của nền văn minh Trung Hoa thời kì cổ - trung đại?", options: ["A. Ảnh hưởng mạnh đến một số quốc gia ở khu vực châu Á.", "B. Đóng góp to lớn cho sự phát triển của văn minh thế giới.", "C. Nhiều phát minh kĩ thuật được ứng dụng rộng rãi ở châu Âu.", "D. Tạo tiền đề để Trung Quốc phát triển theo con đường tư bản."], answer: 3 },
+
+            // BÀI 5 (141 - 180)
+            { id: 141, topic: "Bài 5: Văn minh Phương Tây", q: "Hai nền văn minh lớn ở phương Tây thời kì cổ đại là", options: ["A. Hy Lạp và La Mã.", "B. Ấn Độ và Trung Hoa.", "C. Ai Cập và Lưỡng Hà.", "D. La Mã và A-rập."], answer: 0 },
+            { id: 142, topic: "Bài 5: Văn minh Phương Tây", q: "Người La Mã cổ đại đã sáng tạo ra loại chữ viết nào sau đây?", options: ["A. Chữ Hán.", "B. Chữ hình nêm.", "C. Chữ Phạn.", "D. Chữ La-tinh."], answer: 3 },
+            { id: 143, topic: "Bài 5: Văn minh Phương Tây", q: "Hai bộ sử thi nào sau đây đã đặt nền móng cho văn học Hy Lạp - La Mã cổ đại?", options: ["A. I-li-át và Ô-đi-xê.", "B. A-chi-lút và Xô-phô-clơ.", "C. Ma-ha-bha-ra-ta và Ra-ma-y-a-na.", "D. Vua Ơ-đíp và Những phụ nữ thành Tơ-roa."], answer: 0 },
+            { id: 144, topic: "Bài 5: Văn minh Phương Tây", q: "Tôn giáo chính thức của đế quốc La Mã thời kì cổ đại (từ đầu thế kỉ IV) là", options: ["A. Phật giáo.", "B. Cơ Đốc giáo.", "C. Hồi giáo.", "D. Hin-đu giáo."], answer: 1 },
+            { id: 145, topic: "Bài 5: Văn minh Phương Tây", q: "Ai là tác giả của tác phẩm kịch Rô-mê-ô và Giu-li-ét?", options: ["A. Uy-li-am Sếch-xpia.", "B. Đan-tê A-li-ghê-ri.", "C. Phơ-răng-xoa Ra-bơ-le.", "D. Mi-quen-đơ Xéc-van-téc."], answer: 0 },
+            { id: 146, topic: "Bài 5: Văn minh Phương Tây", q: "Một trong những danh hoạ kiệt xuất của thời kì Phục hưng ở Tây Âu là", options: ["A. Ni-cô-lai Cô-péc-ních.", "B. Lê-ô-na đờ Vanh-xi.", "C. Phơ-răng-xoa Ra-bơ-le.", "D. Ga-li-lê-ô Ga-li-lê."], answer: 1 },
+            { id: 147, topic: "Bài 5: Văn minh Phương Tây", q: "Nhà Thiên văn học nào sau đây đã chứng minh Mặt Trời chỉ là trung tâm của Thái dương hệ và tồn tại trong vũ trụ vô tận?", options: ["A. Ni-cô-lai Cô-péc-ních.", "B. Ga-li-lê-ô Ga-li-lê.", "C. Phơ-răng-xoa Ra-bơ-le.", "D. Gioóc-đan-nô Bru-nô."], answer: 3 },
+            { id: 148, topic: "Bài 5: Văn minh Phương Tây", q: "Nền văn học phương Tây được hình thành trên cơ sở", options: ["A. văn học cổ của Hy Lạp và La Mã.", "B. văn học trung đại của Hy Lạp và La Mã.", "C. văn học cổ của người Trung Quốc.", "D. văn học cổ của người phương Tây."], answer: 0 },
+            { id: 149, topic: "Bài 5: Văn minh Phương Tây", q: "Hệ chữ cái La-tinh và hệ chữ số La Mã là thành tựu của cư dân cổ", options: ["A. Ấn Độ.", "B. Lưỡng Hà.", "C. Trung Quốc.", "D. Hy Lạp – La Mã."], answer: 3 },
+            { id: 150, topic: "Bài 5: Văn minh Phương Tây", q: "Nền văn học cổ đại Hy Lạp –La Mã được tạo nguồn cảm hứng và đề tài phong phú từ", options: ["A. thần thoại.", "B. truyện cười.", "C. truyện ngắn.", "D. tiểu thuyết."], answer: 0 },
+            { id: 151, topic: "Bài 5: Văn minh Phương Tây", q: "Về nghệ thuật, người Hy Lạp – La Mã cổ đại đã đạt được những thành tựu rực rỡ nào dưới đây?", options: ["A. Xây chùa.", "B. Kiến trúc.", "C. Sân khấu.", "D. Dân gian."], answer: 1 },
+            { id: 152, topic: "Bài 5: Văn minh Phương Tây", q: "Về nghệ thuật, người Hy Lạp – La Mã cổ đại đã đạt được những thành tựu rực rỡ nào dưới đây?", options: ["A. Xây chùa.", "B. Điêu khắc.", "C. Sân khấu.", "D. Dân gian."], answer: 1 },
+            { id: 153, topic: "Bài 5: Văn minh Phương Tây", q: "Về nghệ thuật, người Hy Lạp – La Mã cổ đại đã đạt được những thành tựu rực rỡ nào dưới đây?", options: ["A. Xây chùa.", "B. Hội họa.", "C. Sân khấu.", "D. Dân gian."], answer: 1 },
+            { id: 154, topic: "Bài 5: Văn minh Phương Tây", q: "Đền Pác-tê-nông là thành tựu của người Hy Lạp – La Mã cổ đại trên lĩnh vực", options: ["A. kiến trúc.", "B. điêu khắc.", "C. hội họa.", "D. xây dựng."], answer: 0 },
+            { id: 155, topic: "Bài 5: Văn minh Phương Tây", q: "Đền thờ thần Dớt là thành tựu của người Hy Lạp – La Mã cổ đại trên lĩnh vực", options: ["A. kiến trúc.", "B. điêu khắc.", "C. hội họa.", "D. xây dựng."], answer: 0 },
+            { id: 156, topic: "Bài 5: Văn minh Phương Tây", q: "Đấu trường Cô-li-dê là thành tựu của người Hy Lạp – La Mã cổ đại trên lĩnh vực", options: ["A. kiến trúc.", "B. điêu khắc.", "C. hội họa.", "D. xây dựng."], answer: 0 },
+            { id: 157, topic: "Bài 5: Văn minh Phương Tây", q: "Cách tính lịch 1 năm có 365 ngày và ¼ ngày là thành quả của cư dân", options: ["A. Hy Lạp.", "B. La Mã.", "C. Ai Cập.", "D. Trung Quốc."], answer: 1 },
+            { id: 158, topic: "Bài 5: Văn minh Phương Tây", q: "Hệ chữ cái A, B, C và hệ chữ số La Mã (I, II, III,…) là thành tựu của cư dân cổ", options: ["A. Ấn Độ.", "B. Hi Lạp.", "C. Ba Tư.", "D. Hi Lạp – Rôma."], answer: 3 },
+            { id: 159, topic: "Bài 5: Văn minh Phương Tây", q: "Tôn giáo cổ xưa và được coi là chính thống giáo của người Hy Lạp - La Mã cổ đại là", options: ["A. Phật giáo.", "B. Nho giáo.", "C. Cơ Đốc giáo.", "D. Hin-đu giáo."], answer: 2 },
+            { id: 160, topic: "Bài 5: Văn minh Phương Tây", q: "Người Hi Lạp-La Mã cổ đại đã có hiểu biết về Trái Đất và hệ Mặt Trời như thế nào?", options: ["A. Trái Đất có hình đĩa dẹt và Trái Đất chuyển động quanh Mặt Trời.", "B. Trái Đất có hình quả cầu và Mặt Trời chuyển động quanh Trái Đất.", "C. Trái Đất có hình quả cầu và Trái Đất chuyển động quanh Mặt Trời.", "D. Trái Đất có hình đĩa dẹt và Mặt Trời chuyển động quanh Trái Đất."], answer: 2 },
+            { id: 161, topic: "Bài 5: Văn minh Phương Tây", q: "Những tác phẩm: Bữa tiệc cuối cùng, Nàng Mô-na Li-sa thuộc lĩnh vực nào trong thời văn hóa Phục hưng thế kỉ XV-XVI?", options: ["A. Hội họa.", "B. Văn học.", "C. Kịch.", "D. Kiến trúc."], answer: 0 },
+            { id: 162, topic: "Bài 5: Văn minh Phương Tây", q: "Một trong những học giả tiêu biểu của triết học duy vật thời kì Phục hưng ở Tây Âu là", options: ["A. Phran-xít Bê-cơn.", "B. Mi-quen-đơ Xéc-van-téc.", "C. Mi-ken-lăng-giơ.", "D. Đan-tê A-li-ghê-ri."], answer: 0 },
+            { id: 163, topic: "Bài 5: Văn minh Phương Tây", q: "Nội dung nào sau đây không phản ánh đúng đặc điểm về tôn giáo của người Hy Lạp-La Mã cổ đại?", options: ["A. Tín ngưỡng thờ đa thần.", "B. Thường xuyên hiến tế.", "C. Chỉ thờ độc tôn một vị thần.", "D. Cầu nguyện và tổ chức lễ hội."], answer: 2 },
+            { id: 164, topic: "Bài 5: Văn minh Phương Tây", q: "Vì sao nói chữ viết là cống hiến lớn lao của La Mã cổ đại?", options: ["A. Kí hiệu ít, đơn giản, dễ biểu đạt ý nghĩa sự vật, hiện tượng.", "B. Được tất cả các nước trên thế giới sử dụng đến ngày nay.", "C. Có hệ thống chữ cái hoàn chỉnh, cùng với hệ chữ số La Mã.", "D. Đơn giản, khoa học, khả năng ghép chữ linh hoạt, dễ phổ biến."], answer: 3 },
+            { id: 165, topic: "Bài 5: Văn minh Phương Tây", q: "Nội dung nào sau đây không phản ánh đúng nguyên nhân xuất hiện của phong trào Văn hóa Phục hưng?", options: ["A. Giáo lí Giáo hội Cơ Đốc nặng những quan điểm lỗi thời.", "B. Tầng lớp tư sản mới ra đời chưa có địa vị xã hội tương ứng.", "C. Con người nhận thức về bản chất của thế giới xung quanh.", "D. Sự xuất hiện trào lưu Triết học Ánh sáng vào thế kỷ XVIII."], answer: 3 },
+            { id: 166, topic: "Bài 5: Văn minh Phương Tây", q: "Đặc điểm nổi bật của quá trình hình thành và phát triển của triết học Hy Lạp - La Mã cổ đại là", options: ["A. cuộc đấu tranh giữa hai trường phái chủ nghĩa duy vật và duy tâm.", "B. quê hương của nhiều nhà triết học nổi tiếng của phương Tây.", "C. nền tảng cho nhiều thành tựu về tư tưởng, tri thức phương Tây.", "D. ra đời và phát triển trong bối cảnh các cuộc đấu tranh của nô lệ."], answer: 0 },
+            { id: 167, topic: "Bài 5: Văn minh Phương Tây", q: "Ý nào sau đây không phản ánh đúng những nội dung cơ bản của phong trào văn hóa Phục hưng?", options: ["A. Lên án, đả kích Giáo hội Cơ Đốc và giai cấp thống trị phong kiến.", "B. Đòi quyền tự do cá nhân và đề cao giá trị con người, tinh thần dân tộc.", "C. Giải phóng con người khỏi trật tự, lễ giáo phong kiến thối nát.", "D. Đề cao nội dung và giáo lí Cơ Đốc giáo và tư tưởng phong kiến."], answer: 3 },
+            { id: 168, topic: "Bài 5: Văn minh Phương Tây", q: "Nội dung nào sau đây không phản ánh đúng ý nghĩa của những thành tựu văn minh Tây Âu thời kì Phục hưng?", options: ["A. Đề cao giá trị con người và quyền tự do cá nhân, đề cao tinh thần dân tộc.", "B. Mở đường cho sự phát triển của văn minh Tây Âu trong những thế kỉ kế tiếp.", "C. Là cuộc đấu tranh công khai của giai cấp tư sản chống lại chế độ phong kiến.", "D. Góp phần củng cố và mở rộng ảnh hưởng của Giáo hội Cơ Đốc giáo."], answer: 3 },
+            { id: 169, topic: "Bài 5: Văn minh Phương Tây", q: "Những tiến bộ trong cách tính lịch của người phương Tây so với phương Đông xuất phát từ", options: ["A. cách tính lịch dựa theo sự chuyển động của Mặt Trăng.", "B. việc đúc rút kinh nghiệm từ thực tiễn sản xuất.", "C. sự hiểu biết chính xác về Trái Đất và hệ Mặt Trời.", "D. việc tính lịch dựa theo sự chuyển động của Mặt Trời."], answer: 3 },
+            { id: 170, topic: "Bài 5: Văn minh Phương Tây", q: "Người La Mã sớm có hiểu biết chính xác về Trái Đất và hệ Mặt Trời là nhờ", options: ["A. vào việc canh tác nông nghiệp.", "B. họ thường giao thương bằng đường biển.", "C. vào việc buôn bán giữa các thị quốc.", "D. sự phát triển của khoa học - kĩ thuật."], answer: 1 },
+            { id: 171, topic: "Bài 5: Văn minh Phương Tây", q: "Những định lí, định đề đầu tiên có giá trị khái quát cao của toán học ra đời ở", options: ["A. Rôma.", "B. Hy Lạp.", "C. Trung Quốc.", "D. Ấn Độ."], answer: 1 },
+            { id: 172, topic: "Bài 5: Văn minh Phương Tây", q: "Tại sao người Hi Lạp có hiểu biết chính xác hơn về Trái Đất và hệ Mặt Trời ?", options: ["A. Vì nhờ đi biển.", "B. Vì nhờ canh tách nông nghiệp.", "C. Nhờ sự buôn bán giữa các thị quốc.", "D. Nhờ khoa học - kỹ thuật phát triển."], answer: 0 },
+            { id: 173, topic: "Bài 5: Văn minh Phương Tây", q: "Một trong những cống hiến lớn có giá trị đến nay của cư dân La Mã là", options: ["A. bảng chữ cái gồm 24 chữ.", "B. Đền Pác-tê-nông.", "C. giấy, thuốc súng, la bàn.", "D. Đấu trường La Mã."], answer: 0 },
+            { id: 174, topic: "Bài 5: Văn minh Phương Tây", q: "Nhận xét nào không đúng về giá trị các công trình nghiên cứu của các nhà khoa học Hi Lạp, Rôma thời cổ đại?", options: ["A. Những hiểu biết đó là sự kế thừa và phát triển các thành tựu văn hóa của người phương Đông cổ đại.", "B. Đây là những công trình khoa học lớn, còn có giá trị tới ngày nay.", "C. Các công trình không dừng lại ở việc ghi chép và giá trị mà nâng lên tầm khái quát hóa, trừu tượng hóa cao.", "D. Tạo nền tảng cho các phát minh kinh tế thời cổ đại."], answer: 3 },
+            { id: 175, topic: "Bài 5: Văn minh Phương Tây", q: "Năm 776 TCN, tại đền thờ thần Dớt ở Ô-lim-pi-a (Hy Lạp) đã diễn ra sự kiện nào sau đây?", options: ["A. Chính quyền La Mã chính thức công nhận Cơ Đốc giáo.", "B. Các cuộc đấu tranh của nô lệ và dân nghèo bùng nổ.", "C. Đại hội thể thao Pa-na-thê-nai-a tại A- ten.", "D. Đại hội Ô-lim-píc đầu tiên được tổ chức."], answer: 3 },
+            { id: 176, topic: "Bài 5: Văn minh Phương Tây", q: "Một số định lí của nhà toán học nào từ thời cổ đại vẫn còn rất phổ biến đến ngày nay?", options: ["A. Talet, Pitago, Ơclit.", "B. Pitago, Hipôcrat.", "C. Talet, Hôme.", "D. Hôme, Hêrôdốt."], answer: 0 },
+            { id: 177, topic: "Bài 5: Văn minh Phương Tây", q: "Những công trình kiến trúc của quốc gia cổ đại nào đạt đến đỉnh cao của nghệ thuật nhưng vẫn rất gần gũi với cuộc sống?", options: ["A. Các đền thờ ở Hi lạp.", "B. Đền đài, đấu trường ở Rôma.", "C. Các kim tự tháp ở Ai Cập.", "D. Các thành quách ở Trung Quốc."], answer: 0 },
+            { id: 178, topic: "Bài 5: Văn minh Phương Tây", q: "Phong trào văn hóa Phục hưng được đánh giá là một “Cuộc cách mạng tiến bộ vĩ đại” vì lí do nào sau đây?", options: ["A. Là cuộc đấu tranh công khai đầu tiên của tư sản chống phong kiến.", "B. Mở ra những vùng đất mới, con đường mới và những dân tộc mới.", "C. Thị trường thế giới mở rộng, thúc đẩy hàng hải quốc tế phát triển.", "D. Thúc đẩy quá trình khủng hoảng của chủ nghĩa tư bản ở châu Âu."], answer: 0 },
+            { id: 179, topic: "Bài 5: Văn minh Phương Tây", q: "Phong trào văn hóa Phục hưng được đánh giá là", options: ["A. một cuộc cách mạng của tầng lớp quý tộc và tăng lữ.", "B. cuộc đấu tranh của tầng lớp quý tộc chống lại tư sản.", "C. bước tiến kì diệu của văn minh phương Tây.", "D. bước tiến thần kì của văn minh phương Đông."], answer: 2 },
+            { id: 180, topic: "Bài 5: Văn minh Phương Tây", q: "Hệ thống chữ cái Tiếng Việt (chữ Quốc ngữ) thuộc", options: ["A. chữ tượng hình.", "B. chữ tượng ý.", "C. chữ La-tinh.", "D. chữ Việt cổ."], answer: 2 }
+        ];
+
+        function QuizApp() {
+            const [questions, setQuestions] = useState(originalQuestions);
+            const [answers, setAnswers] = useState({});
+            const [submitted, setSubmitted] = useState(false);
+            const [selectedTopic, setSelectedTopic] = useState("Tất cả");
+
+            // Chọn phương án trả lời
+            const handleSelect = (qId, optionIdx) => {
+                if (submitted) return;
+                setAnswers(prev => ({ ...prev, [qId]: optionIdx }));
+            };
+
+            // Lọc câu hỏi theo bài/chủ đề
+            const filteredQuestions = selectedTopic === "Tất cả"
+                ? questions
+                : questions.filter(q => q.topic.includes(selectedTopic));
+
+            // Tính điểm
+            const score = Object.keys(answers).reduce((acc, qId) => {
+                const q = questions.find(item => item.id === parseInt(qId));
+                return q && answers[qId] === q.answer ? acc + 1 : acc;
+            }, 0);
+
+            // Nút Làm Lại
+            const handleReset = () => {
+                setAnswers({});
+                setSubmitted(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            // Nút Xáo Trộn Vị Trí Câu Hỏi & Phương Án A, B, C, D
+            const handleShuffle = () => {
+                const shuffledQs = [...originalQuestions].map(q => {
+                    const originalAnsText = q.options[q.answer];
+                    // Tạo mảng mới các lựa chọn đã được đảo
+                    const shuffledOpts = [...q.options].sort(() => Math.random() - 0.5);
+                    // Tìm vị trí mới của đáp án đúng
+                    const newAnsIdx = shuffledOpts.indexOf(originalAnsText);
+                    return {
+                        ...q,
+                        options: shuffledOpts,
+                        answer: newAnsIdx
+                    };
+                }).sort(() => Math.random() - 0.5);
+
+                setQuestions(shuffledQs);
+                handleReset();
+            };
+
+            return (
+                <div class="min-h-screen bg-slate-100 text-slate-800 pb-12">
+                    {/* Thanh tiêu đề */}
+                    <header class="sticky top-0 z-30 bg-indigo-700 text-white shadow-lg">
+                        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+                            <div>
+                                <h1 class="text-xl sm:text-2xl font-black">ÔN THI LỊCH SỬ 10 - GIỮA HK1</h1>
+                                <p class="text-xs text-indigo-200">Hệ thống trắc nghiệm tương tác 180 câu chuẩn tài liệu</p>
+                            </div>
+                            <div class="bg-indigo-800 px-4 py-2 rounded-xl text-center">
+                                <span class="text-xs uppercase font-bold text-indigo-300 block">Tổng số câu</span>
+                                <span class="text-lg font-extrabold text-amber-300">{questions.length} Câu</span>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Khung điều khiển & Tiến độ */}
+                    <main class="max-w-5xl mx-auto px-4 mt-6 space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200">
+                            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                                <div class="w-full md:w-1/3">
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Chọn chủ đề ôn tập:</label>
+                                    <select 
+                                        value={selectedTopic} 
+                                        onChange={(e) => setSelectedTopic(e.target.value)}
+                                        class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    >
+                                        <option value="Tất cả">Tất cả bài học (180 câu)</option>
+                                        <option value="Chủ đề 1">Chủ đề 1: Lịch sử và Sử học (35 câu)</option>
+                                        <option value="Bài 3">Bài 3: Vai trò của Sử học (31 câu)</option>
+                                        <option value="Bài 4">Bài 4: Văn minh Phương Đông (74 câu)</option>
+                                        <option value="Bài 5">Bài 5: Văn minh Phương Tây (40 câu)</option>
+                                    </select>
+                                </div>
+
+                                <div class="w-full md:w-1/3 text-center">
+                                    <div class="text-xs font-bold text-slate-500 mb-1">
+                                        Đã làm: <span class="text-indigo-600">{Object.keys(answers).length}</span> / {questions.length} câu
+                                    </div>
+                                    <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+                                        <div 
+                                            class="bg-indigo-600 h-full transition-all duration-300"
+                                            style={{ width: `${(Object.keys(answers).length / questions.length) * 100}%` }}
+                                        ></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
+                                    <button onClick={handleShuffle} class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm rounded-xl shadow transition">
+                                        🔀 Xáo trộn câu hỏi
+                                    </button>
+                                    <button onClick={handleReset} class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white font-bold text-sm rounded-xl shadow transition">
+                                        🔄 Làm lại
+                                    </button>
+                                    <button onClick={() => setSubmitted(true)} class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md transition">
+                                        📝 Nộp bài
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Kết quả sau khi nộp bài */}
+                            {submitted && (
+                                <div class="mt-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-center">
+                                    <h2 class="text-xl font-black text-emerald-800">
+                                        KẾT QUẢ: {score} / {questions.length} CÂU ĐÚNG ({((score / questions.length) * 100).toFixed(1)}%)
+                                    </h2>
+                                    <p class="text-sm text-emerald-600 mt-1">
+                                        Những câu sai được <span class="text-red-600 font-bold">tô màu đỏ</span> và đi kèm đáp án chuẩn màu xanh lá cây bên dưới.
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Danh sách câu hỏi */}
+                        <div class="space-y-4">
+                            {filteredQuestions.map((q, index) => {
+                                const selectedOpt = answers[q.id];
+                                const isAnswered = selectedOpt !== undefined;
+                                const isWrong = submitted && isAnswered && selectedOpt !== q.answer;
+
+                                return (
+                                    <div 
+                                        key={q.id} 
+                                        class={`p-6 rounded-2xl bg-white border-2 shadow-sm transition ${
+                                            submitted 
+                                                ? (selectedOpt === q.answer ? 'border-green-400 bg-green-50/20' : (isAnswered ? 'border-red-400 bg-red-50/20' : 'border-slate-200'))
+                                                : 'border-slate-200 hover:border-indigo-300'
+                                        }`}
+                                    >
+                                        <div class="flex items-center justify-between gap-2 mb-3">
+                                            <span class="px-3 py-1 bg-indigo-100 text-indigo-800 font-black text-xs rounded-lg">
+                                                Câu {index + 1}
+                                            </span>
+                                            <span class="text-xs font-semibold text-slate-400">
+                                                {q.topic}
+                                            </span>
+                                        </div>
+
+                                        <h3 class="text-base sm:text-lg font-bold text-slate-800 mb-4">
+                                            {q.q}
+                                        </h3>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            {q.options.map((opt, optIdx) => {
+                                                let btnClass = "border-slate-200 bg-slate-50 text-slate-700 hover:bg-indigo-50 hover:border-indigo-300";
+
+                                                if (selectedOpt === optIdx) {
+                                                    btnClass = "border-indigo-600 bg-indigo-50 text-indigo-900 font-bold shadow-sm";
+                                                }
+
+                                                if (submitted) {
+                                                    if (optIdx === q.answer) {
+                                                        // Câu đúng tô màu xanh lá
+                                                        btnClass = "border-green-600 bg-green-500 text-white font-bold shadow";
+                                                    } else if (selectedOpt === optIdx) {
+                                                        // Câu làm sai tô màu đỏ
+                                                        btnClass = "border-red-600 bg-red-500 text-white font-bold shadow";
+                                                    } else {
+                                                        btnClass = "border-slate-200 bg-slate-100 text-slate-400 opacity-60";
+                                                    }
+                                                }
+
+                                                return (
+                                                    <button
+                                                        key={optIdx}
+                                                        onClick={() => handleSelect(q.id, optIdx)}
+                                                        disabled={submitted}
+                                                        class={`p-3.5 rounded-xl border-2 text-left text-sm transition flex items-start ${btnClass}`}
+                                                    >
+                                                        {opt}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+
+                                        {/* Hiển thị đáp án đúng nếu trả lời sai */}
+                                        {submitted && isWrong && (
+                                            <div class="mt-4 p-3 bg-red-100 border border-red-300 rounded-xl text-xs text-red-800 font-semibold flex items-center gap-2">
+                                                <span>❌ Bạn đã chọn sai! Đáp án đúng chuẩn là:</span>
+                                                <span class="bg-green-600 text-white px-2 py-0.5 rounded font-bold">{q.options[q.answer]}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </main>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<QuizApp />);
+    </script>
+</body>
+</html>
